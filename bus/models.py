@@ -29,3 +29,5 @@ class Bus(models.Model):
     )
     to = models.CharField("to city", max_length=40)
     type_of_bus = models.CharField(max_length=20)
+    chir_number = models.ForeignKey(Chires, on_delete=models.CASCADE)
+    

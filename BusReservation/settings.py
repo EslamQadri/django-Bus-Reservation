@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # apps
     "bus",
+    # 3d
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -122,3 +125,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+from django_crontab import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    "create_something_on_specific_day": {
+        "task": "bus.tasks.create_something_on_specific_day",
+        "schedule": crontab(minute=0, hour=0),
+    },
+}

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from bus.utils import generate_random_text
+
 
 # Create your models here.
 class Chires(models.Model):
@@ -13,21 +15,40 @@ class BusChoies(models.TextChoices):
 
 
 class Bus(models.Model):
-    bus_number = models.CharField(max_length=25, unique=True, blank=False, null=False)
+    bus_number = models.CharField(
+        max_length=4,
+        unique=True,
+        blank=False,
+        null=False,
+        default=generate_random_text(),
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="trip_created"
-    )
     number_of_chires = models.IntegerField()
     price_of_chir = models.DecimalField(max_digits=4, decimal_places=2)
-    leave_at = models.DateTimeField()
-    arive_at = models.DateTimeField()
+    type_of_bus = models.CharField(
+        max_length=10, choices=BusChoies.choices, default=BusChoies.normal
+    )
+    chir_number = models.ForeignKey(Chires, on_delete=models.CASCADE)
+    cancel = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f"{self.bus_number}"
+
+
+class Trip(models.Model):
     frm = models.CharField(
         "from city",
         max_length=40,
     )
     to = models.CharField("to city", max_length=40)
-    type_of_bus = models.CharField(max_length=20)
-    chir_number = models.ForeignKey(Chires, on_delete=models.CASCADE)
-    
+    leave_at = models.DateTimeField()
+    arive_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    leave_at = models.DateTimeField()
+    arive_at = models.DateTimeField()
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.bus.bus_number} From {self.frm} To {self.to}"

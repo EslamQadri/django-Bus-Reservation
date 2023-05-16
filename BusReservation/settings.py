@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from django_crontab import crontab
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     "bus",
     # 3d
     "django_celery_beat",
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -125,11 +128,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-from django_crontab import crontab
-
-CELERY_BEAT_SCHEDULE = {
-    "create_something_on_specific_day": {
-        "task": "bus.tasks.create_something_on_specific_day",
-        "schedule": crontab(minute=0, hour=0),
-    },
-}

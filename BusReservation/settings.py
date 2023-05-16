@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # 3d
     "django_celery_beat",
     "django_crontab",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [

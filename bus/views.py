@@ -2,6 +2,11 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from bus.serializers import BusSerializer, TripSerializer
 from bus.models import Bus, Trip
 
+"""
+to-do 
+make auth and permissions
+"""
+
 
 class CreateTripView(ListCreateAPIView):
     queryset = Trip.objects.all()

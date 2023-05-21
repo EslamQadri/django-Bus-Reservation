@@ -1,12 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 from bus.utils import generate_random_text
 
 
+
 # Create your models here.
-class Chires(models.Model):
-    passanger = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class BusChoies(models.TextChoices):
@@ -24,12 +22,12 @@ class Bus(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    number_of_chires = models.IntegerField()
-    price_of_chir = models.DecimalField(max_digits=4, decimal_places=2)
+    capacity = models.IntegerField()
+
     type_of_bus = models.CharField(
         max_length=10, choices=BusChoies.choices, default=BusChoies.normal
     )
-    chir_number = models.ForeignKey(Chires, on_delete=models.CASCADE)
+
     cancel = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -46,9 +44,21 @@ class Trip(models.Model):
     arive_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    leave_at = models.DateTimeField()
-    arive_at = models.DateTimeField()
+
+    price_of_chir = models.DecimalField(max_digits=5, decimal_places=2)
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.bus.bus_number} From {self.frm} To {self.to}"
+
+
+class Chires(models.Model):
+    passanger = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    number_of_chir = models.IntegerField()
+    available = models.BooleanField(default=True)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.trip}  is availabe ? {self.available}"
+
+
